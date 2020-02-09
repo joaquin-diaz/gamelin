@@ -1,10 +1,12 @@
 package com.bochelin.chesstd.pathfinding
 
+import com.badlogic.gdx.ai.pfa.GraphPath
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.utils.Array
-import kotlin.random.Random
 
-class Pathfinder(val mapSize: Int) {
-    private val mapCenter = mapSize / 2f
+class Pathfinder(mapLayer: TiledMapTileLayer, tileWidth: Int, tileHeight: Int) {
+    // Map is squared
+    private val mapSize = mapLayer.width
     private val tileGraph = TileGraph()
     private val tilesMatrix = Array<Array<Tile>>()
 
@@ -14,9 +16,7 @@ class Pathfinder(val mapSize: Int) {
             val row = Array<Tile>()
 
             for (x in 0 until mapSize) {
-                // Random obstacle for testing purposes
-                val hasObstacle = Math.random() > 0.8 && x.toFloat() != mapCenter && y.toFloat() != mapCenter
-                val tile = Tile(x.toFloat(), y.toFloat(), hasObstacle)
+                val tile = Tile((tileWidth * x) + (tileWidth / 2f) , (tileHeight * y) + (tileWidth / 2f))
                 row.add(tile)
                 tileGraph.addTile(tile)
             }
@@ -30,31 +30,6 @@ class Pathfinder(val mapSize: Int) {
                 createConnectionsForTile(x, y)
             }
         }
-
-        // Testing only
-        val startingPointX = 0
-        val startingPointY = Random.nextInt(mapSize)
-        println("Finding path to center from: $startingPointX, $startingPointY")
-        val paths = tileGraph.findPath(tilesMatrix[startingPointX][startingPointY], tilesMatrix[mapCenter.toInt()][mapCenter.toInt()])
-
-        for (y in 0 until mapSize) {
-            var row = "|"
-
-            for (x in 0 until mapSize) {
-                val tile = tilesMatrix[y][x]
-
-                if (paths.contains(tile)) {
-                    row += " X |"
-                } else if (tile.hasObstacle) {
-                    row += " T |"
-                } else {
-                    row += " O |"
-                }
-            }
-
-            println(row)
-            println("_______".repeat(mapSize))
-        }
     }
 
     private fun createConnectionsForTile(x: Int, y: Int) {
@@ -67,7 +42,6 @@ class Pathfinder(val mapSize: Int) {
             for (boundsX in 0..2) {
                 val connectionTileX = topCornerX + boundsX
                 if (isNotOutOfBounds(connectionTileX, connectionTileY) && (connectionTileX != x || connectionTileY != y)){
-                    println("$x, $y, $connectionTileX, $connectionTileY")
                     tileGraph.connectTiles(tile, tilesMatrix[connectionTileY][connectionTileX])
                 }
             }
@@ -76,5 +50,13 @@ class Pathfinder(val mapSize: Int) {
 
     private fun isNotOutOfBounds(x: Int, y: Int): Boolean {
         return x >= 0 && y >= 0 && x < mapSize && y < mapSize
+    }
+
+    fun getTileAt(x: Int, y: Int): Tile {
+        return tilesMatrix[x][y]
+    }
+
+    fun findPath(fromTile: Tile, toTile: Tile): GraphPath<Tile> {
+        return tileGraph.findPath(fromTile, toTile)
     }
 }
