@@ -6,7 +6,7 @@ class GameCamera(val screenWidth: Float, val screenHeight: Float) : Orthographic
     protected val SCREEN_MOVEMENT_VELOCITY = 0.7f;
 
     protected val MAX_ZOOM_DISTANCE = 1.7f
-    protected val MIN_ZOOM_DISTANCE = 0.7f
+    protected val MIN_ZOOM_DISTANCE = 0.9f
 
     init {
         zoom = MIN_ZOOM_DISTANCE
@@ -14,7 +14,7 @@ class GameCamera(val screenWidth: Float, val screenHeight: Float) : Orthographic
         update()
     }
 
-    public fun adjustZoomLevels(initialDistance: Float, distance: Float) {
+    fun adjustZoomLevels(initialDistance: Float, distance: Float) {
         val newZoomDistance = distance / initialDistance
 
         if (newZoomDistance <= MAX_ZOOM_DISTANCE && newZoomDistance > MIN_ZOOM_DISTANCE) {
@@ -23,7 +23,7 @@ class GameCamera(val screenWidth: Float, val screenHeight: Float) : Orthographic
         }
     }
 
-    public fun adjustCameraPosition(deltaX: Float, deltaY: Float) {
+    fun adjustCameraPosition(deltaX: Float, deltaY: Float) {
         val zoomModifier = this.zoom / 2f
         var newX = this.position.x - (deltaX * SCREEN_MOVEMENT_VELOCITY) * zoomModifier
         var newY = this.position.y + (deltaY * SCREEN_MOVEMENT_VELOCITY) * zoomModifier

@@ -1,5 +1,6 @@
 package com.bochelin.chesstd.screens
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.viewport.FitViewport
@@ -12,6 +13,10 @@ open class BaseScreen(val game: Game): KtxScreen, GestureDetector.GestureListene
     protected val HEIGHT = 1080f
     protected val camera = GameCamera(WIDTH, HEIGHT).apply { setToOrtho(false, WIDTH, HEIGHT) }
     protected val viewport = FitViewport(WIDTH / 4, HEIGHT / 4, camera)
+
+    init {
+        Gdx.input.inputProcessor = GestureDetector(this)
+    }
 
     override fun resize(width: Int, height: Int) {
         viewport.update(width, height)
