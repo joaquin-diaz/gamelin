@@ -3,14 +3,13 @@ package com.bochelin.chesstd.system
 import com.badlogic.gdx.graphics.OrthographicCamera
 
 class GameCamera(val screenWidth: Float, val screenHeight: Float) : OrthographicCamera() {
-    protected val SCREEN_MOVEMENT_VELOCITY = 0.7f;
+    protected val SCREEN_MOVEMENT_VELOCITY = 0.7f
 
     protected val MAX_ZOOM_DISTANCE = 1.7f
-    protected val MIN_ZOOM_DISTANCE = 0.9f
+    protected val MIN_ZOOM_DISTANCE = 1.5f
 
     init {
-        zoom = MIN_ZOOM_DISTANCE
-        position.set(screenWidth / 2f, 0.0f, 0.0f)
+        this.zoom = MIN_ZOOM_DISTANCE
         update()
     }
 

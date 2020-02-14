@@ -1,25 +1,50 @@
 package com.bochelin.chesstd.screens
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.utils.viewport.FitViewport
 import com.bochelin.chesstd.Game
+import com.bochelin.chesstd.maps.BaseMap
+import com.bochelin.chesstd.system.Debug
 import com.bochelin.chesstd.system.GameCamera
 import ktx.app.KtxScreen
 
 open class BaseScreen(val game: Game): KtxScreen, GestureDetector.GestureListener {
-    protected val WIDTH = 1920f
-    protected val HEIGHT = 1080f
-    protected val camera = GameCamera(WIDTH, HEIGHT).apply { setToOrtho(false, WIDTH, HEIGHT) }
-    protected val viewport = FitViewport(WIDTH / 4, HEIGHT / 4, camera)
+    val spriteBatch = SpriteBatch()
+    val map = BaseMap()
+
+    companion object {
+        val WIDTH = 1280f
+        val HEIGHT = 720f
+    }
+
+    val camera = GameCamera(WIDTH, HEIGHT).apply {
+        setToOrtho(false, WIDTH, HEIGHT)
+        this.position.x = 0f
+        this.position.y = 0f
+        this.update()
+    }
 
     init {
         Gdx.input.inputProcessor = GestureDetector(this)
     }
 
+    override fun render(delta: Float) {
+        super.render(delta)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+        Gdx.gl.glActiveTexture(GL20.GL_TEXTURE0)
+
+        spriteBatch.projectionMatrix = camera.combined
+        camera.update()
+    }
+
     override fun resize(width: Int, height: Int) {
-        viewport.update(width, height)
+        camera.viewportWidth = width.toFloat()
+        camera.viewportHeight = height.toFloat()
+        camera.update()
 
         super.resize(width, height)
     }
