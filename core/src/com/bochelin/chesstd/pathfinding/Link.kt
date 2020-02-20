@@ -1,6 +1,7 @@
 package com.bochelin.chesstd.pathfinding
 
 import com.badlogic.gdx.ai.pfa.Connection
+import com.bochelin.chesstd.maps.Tile
 
 class Link(val fromTile: Tile, val toTile: Tile): Connection<Tile> {
     override fun getFromNode(): Tile {

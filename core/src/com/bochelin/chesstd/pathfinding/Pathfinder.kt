@@ -1,30 +1,20 @@
 package com.bochelin.chesstd.pathfinding
 
 import com.badlogic.gdx.ai.pfa.GraphPath
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
-import com.badlogic.gdx.utils.Array
+import com.bochelin.chesstd.maps.Tile
 
-class Pathfinder(mapLayer: TiledMapTileLayer, tileWidth: Int, tileHeight: Int) {
+class Pathfinder(val mapSize: Int, val tilesMatrix: Array<Array<Tile>>) {
     // Map is squared
-    private val mapSize = mapLayer.width
     private val tileGraph = TileGraph()
-    private val tilesMatrix = Array<Array<Tile>>()
 
     init {
-        // Create tiles
+        // Create connections
         for (y in 0 until mapSize) {
-            val row = Array<Tile>()
-
             for (x in 0 until mapSize) {
-                val tile = Tile((tileWidth * x) + (tileWidth / 2f) , (tileHeight * y) + (tileWidth / 2f))
-                row.add(tile)
-                tileGraph.addTile(tile)
+                tileGraph.addTile(tilesMatrix[y][x])
             }
-
-            tilesMatrix.add(row)
         }
 
-        // Create connections
         for (y in 0 until mapSize) {
             for (x in 0 until mapSize) {
                 createConnectionsForTile(x, y)

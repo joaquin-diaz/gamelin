@@ -7,6 +7,7 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.ObjectMap
+import com.bochelin.chesstd.maps.Tile
 
 class TileGraph: IndexedGraph<Tile> {
     val tileHeuristic: TileHeuristic = TileHeuristic()
